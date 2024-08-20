@@ -9,8 +9,8 @@ const router = express.Router();
 router.post('/register', (request, response) => {
     const { application_number, aadhar_number, application_date, name, father_name, validity, issue_date } = request.body
 
-    const statement = `insert into learning_licenses (application_number, user_id, aadhar_number, application_date, name, father_name, validity, issue_date) values (?, ?, ?, ?, ?, ?, ?, ?)`
-    db.pool.execute(statement, [application_number, request.user.user_id, aadhar_number, application_date, name, father_name, validity, issue_date],
+    const statement = `insert into learning_licenses (application_number, user_id, aadhar_number, application_date, name, father_name, status, validity, issue_date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    db.pool.execute(statement, [application_number, request.user.user_id, aadhar_number, application_date, name, father_name, status, validity, issue_date],
         (error, result) => {
             response.send(utils.createResult(error, result))
         })

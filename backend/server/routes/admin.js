@@ -8,6 +8,7 @@ const cryptoJs = require('crypto-js')
 const router = express.Router();
 
 
+
 router.post('/register', (request, response) => {
     const { admin_id, name, email, password, mobile } = request.body
 
