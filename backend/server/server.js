@@ -11,6 +11,7 @@ app.use(morgan('combined'))
 app.use(express.json({limit : '100mb'}))
 app.use(express.urlencoded({extended : true, limit : '100mb'}))
 
+
 app.use((request, response, next) =>
 {
     if (request.url == '/user/login' ||
@@ -40,6 +41,7 @@ app.use((request, response, next) =>
         }
     }
 })
+
 
 const userRouter = require('./routes/user')
 const adminRouter = require('./routes/admin')

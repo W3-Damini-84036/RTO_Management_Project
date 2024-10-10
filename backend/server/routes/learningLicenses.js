@@ -6,8 +6,15 @@ const config = require('../config')
 
 const router = express.Router();
 
-router.post('/register', (request, response) => {
-    const { application_number, aadhar_number, application_date, name, father_name, validity, issue_date } = request.body
+const authenticate = (request, response, next) => {
+    const token = request.header('Authorization').replace('Bearer ', '');
+    const decodedToken = jwt.verify(token, config.secretKey);
+    request.user = { user_id: decodedToken.user_id };
+    next();
+};
+
+router.post('/register', authenticate, (request, response) => {
+    const { application_number, aadhar_number, application_date, name, father_name, status, validity, issue_date } = request.body
 
     const statement = `insert into learning_licenses (application_number, user_id, aadhar_number, application_date, name, father_name, status, validity, issue_date) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     db.pool.execute(statement, [application_number, request.user.user_id, aadhar_number, application_date, name, father_name, status, validity, issue_date],
@@ -17,7 +24,7 @@ router.post('/register', (request, response) => {
 })
 
 
-router.get('/licenses', (request, response) => {
+router.get('/licenses', authenticate, (request, response) => {
     const statement = `SELECT * FROM learning_licenses WHERE user_id =?`;
     db.pool.execute(statement, [request.user.user_id], (error, results) => {
         response.send(utils.createResult(error, results));
@@ -26,7 +33,7 @@ router.get('/licenses', (request, response) => {
 
 
 
-router.put('/licenses/:appNumber', (request, response) => {
+router.put('/licenses/:appNumber', authenticate, (request, response) => {
     const appNumber = request.params.appNumber;
     const { aadhar_number, name, father_name, validity, issue_date } = request.body;
 

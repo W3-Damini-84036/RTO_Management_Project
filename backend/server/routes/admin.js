@@ -41,12 +41,13 @@ router.post('/login', (request, response) => {
                 const payload = { admin_id, name }
 
                 const token = jwt.sign(payload, config.secret)
-                response.send(
-                    utils.createSuccess({
-                        token,
-                        name
-                    })
-                )
+                // response.send(
+                //     utils.createSuccess({
+                //         token,
+                //         name
+                //     })
+                // )
+                response.send({ data: { token, admin_id } });
             }
         }
     })
